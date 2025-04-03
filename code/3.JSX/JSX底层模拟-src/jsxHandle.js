@@ -55,6 +55,7 @@ export function createElement(ele, props, ...children) {
     return virtualDOM;
 };
 
+//16 的写法 
 /* render:把虚拟DOM变为真实DOM */
 export function render(virtualDOM, container) {
     let { type, props } = virtualDOM;
