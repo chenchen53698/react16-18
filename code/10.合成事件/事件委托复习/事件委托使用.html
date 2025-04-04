@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            list-style: none;
+        }
+        ul {
+            overflow: hidden;
+            background: #ccc;
+        }
+        li {
+            float: left;
+            width: 100px;
+            height: 100px;
+            margin: 20px;
+            background: pink;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <script>
+        // var aLi = document.querySelectorAll('li')
+
+        // aLi.forEach(function (ele) {
+        //     ele.addEventListener('click', function () {
+        //         ele.style.background = 'red'
+        //     })
+        // })
+        
+
+        // 事件委托
+        // - 自己的事情委托给父对象来做
+        var oUl = document.querySelector('ul')
+
+        oUl.addEventListener('click', function (ev) {
+            // this.style.background = 'red'
+
+            // 事件源
+            console.log(ev.target)
+            if (ev.target.tagName === 'LI') {
+                ev.target.style.background = 'red'
+            }
+        })
+    </script>
+</body>
+</html>
