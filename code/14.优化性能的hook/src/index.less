@@ -1,0 +1,24 @@
+@import './assets/reset.min.css';//默认清除样式
+
+/* 全局样式 */
+/* 
+    修改ui组件库中的样式:
+    1.找到渲染后的内容，查看它的样式和相关类名
+    2.按照样式类去修改样式，只要保证我们写的样式权重即可
+*/
+.ant-btn {
+    border-radius: 0;
+    // & 父选择器引用 嵌套时代表外层选择器 也就是.ant-btn
+    &.ant-btn-sm {
+        border-radius: 0;
+    }
+}
+
+.ant-input,
+.ant-picker {
+    border-radius: 0;
+}
+
+textarea {
+    resize: none;
+}
