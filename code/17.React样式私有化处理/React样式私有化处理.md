@@ -232,11 +232,187 @@ const Demo = function Demo() {
 
 
 
+### 4. React-JSS
+
+JSS是一个CSS创作工具，它允许我们使用JavaScript以生命式、无冲突和可重用的方式来描述样式。JSS 是一种新的样式策略！ React-JSS 是一个框架集成，可以在 React 应用程序中使用 JSS。它是一个单独的包，所以不需要安装 JSS 核心，只需要 React-JSS 包即可。React-JSS 使用新的 Hooks API 将 JSS 与 React 结合使用。 
+
+```javascript
+import React from 'react';
+import { createUseStyles } from 'react-jss';
+const useStyles = createUseStyles({
+    personal: {
+        width: '300px',
+        height: '200px',
+        // 基于 & 实现样式嵌套
+        '& span': {
+            color: 'green'
+        }
+    },
+    title: {
+        // 使用动态值
+        color: props => props.color,
+        fontSize: '16px'
+    },
+    // 使用动态值
+    subTitle: props => {
+        return {
+            color: props.color,
+            fontSize: '14px'
+        };
+    }
+});
+const Demo = function Demo(props) {
+    const { personal, title, subTitle } = useStyles(props);
+    return <div className={personal}>
+        <h1 className={title}>珠峰培训</h1>
+        <h2 className={subTitle}>珠峰培训</h2>
+        <span>珠峰培训</span>
+    </div>;
+};
+export default Demo;
+```
+
+编译后的效果
+
+```
+// html结构 
+<div class="personal-0-2-16">
+    <h1 class="title-0-2-17 title-d0-0-2-19">珠峰培训</h1>
+    <h2 class="subTitle-0-2-18 subTitle-d1-0-2-20">珠峰培训</h2>
+    <span>珠峰培训</span>
+</div>
+
+// css样式
+.personal-0-2-16{
+    width: 300px;
+    height: 200px;
+}
+.title-d0-0-2-19{
+    color: red;
+}
+.title-0-2-17{
+    font-size: 16px;
+}
+.personal-0-2-16 span{
+    color: green;
+}
+```
+
+但是从 react-jss 第10版本之后，不支持在类组件中使用，只能用于函数组件中！
+如果想在类组件中使用，还需我们自己处理一下！
+
+```javascript
+import React from 'react';
+import { createUseStyles } from 'react-jss';
+const useStyles = createUseStyles({
+    ...
+});
+// 高阶组件
+const withStyles = function withStyles(Component) {
+    return function (props) {
+        const styles = useStyles(props);
+        return <Component {...styles} />;
+    };
+};
+class Demo extends React.Component {
+    render() {
+        const { personal, title, subTitle } = this.props;
+        return <div className={personal}>
+            ...
+        </div>;
+    }
+}
+export default withStyles(Demo);
+```
+
+#### 5. styled-components
+
+目前在React中，还流行 CSS-IN-JS 的模式：也就是把CSS像JS一样进行编写；其中比较常用的插件就是 `styled-components`！
+
+> $ yarn add styled-components
+> https://styled-components.com/docs/basics#getting-started
+
+**创建一个样式的js文件，例如：style.js**
+想要有语法提示，可以安装vscode插件：vscode-styled-components
+
+```javascript
+import styled from "styled-components";
+
+// 创建公共的样式变量
+const colorBlue = "#1677ff",
+    colorRed = "#ff4d4f";
+
+// 基础用法
+export const VoteBox = styled.div`
+    box-sizing: border-box;
+    margin: 0 auto;
+    width: 300px;
+
+    .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #DDD;
+
+        .title {
+            font-size: 18px;
+            line-height: 50px;
+        }
+
+        .num {
+            font-size: 18px;
+            color: ${colorRed};
+        }
+    }
+
+    .ant-btn {
+        margin-right: 15px;
+    }
+`;
+
+// 使用传递的属性，动态设置样式  &&  给属性设置默认值！！
+export const VoteMain = styled.div.attrs(props => {
+    return {
+        color: props.color || colorBlue
+    }
+})`
+    padding: 15px 0;
+
+    p {
+        line-height: 35px;
+        color:${props => props.color};
+        font-size: ${props => props.size}px;
+    }
+`;
+```
+
+**组件中使用**
+
+```javascript
+import { VoteBox, VoteMain } from './style';
+
+const Demo = function Demo() {
+    return <VoteBox>
+        <div className="header">
+            <h2 className="title">React是很棒的前端框架</h2>
+            <span className="num">0</span>
+        </div>
+        <VoteMain size={16}>
+            <p>支持人数：0人</p>
+            <p>反对人数：0人</p>
+            <p>支持比率：--</p>
+        </VoteMain>
+        <div className="footer">
+            <Button type="primary">支持</Button>
+            <Button type="primary" danger>反对</Button>
+        </div>
+    </VoteBox>
+};
+
+export default Demo;
+```
 
 
-- <font color='orange'>**创建**</font>：在SRC目录中，创建一个 xxx.jsx 的文件，就是要创建一个组件；我们在此文件中，创建一个函数，让函数返回JSX视图「或者JSX元素、virtualDOM虚拟DOM对象」；这就是创建了一个**“函数组件**”！！
-
-- <font color='orange'>**调用**</font>：基于ES6Module规范，导入创建的组件「可以忽略.jsx后缀名」，然后像写标签一样调用这个组件即可！！
 
 
 

@@ -34,6 +34,7 @@ const ProxyComponent = function ProxyComponent(Component) {
     // 方法执行要返回的一个函数组件：我们基于export default导出的是这个组件，在App调用的也是这个组件(HOC)
     return function HOC(props) {
         let sty = useStyles();
+        console.log(props, sty)
         return <Component {...props} {...sty} />;
     };
 };
